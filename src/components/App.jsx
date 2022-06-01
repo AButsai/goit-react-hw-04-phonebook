@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useLocalStoreg } from 'hooks/useLocalStorage';
+import { LOCALSTOREGE_KEY } from 'helpers/variablesHelper';
 
 import ContactForm from './ContactForm';
 import ContactList from './ContactList';
@@ -8,8 +9,6 @@ import Filter from './Filter';
 import s from './App.module.css';
 
 export function App() {
-  const LOCALSTOREGE_KEY = 'contacts-key';
-
   const [contact, setContact] = useLocalStoreg(LOCALSTOREGE_KEY, []);
   const [filter, setFilter] = useState('');
 
