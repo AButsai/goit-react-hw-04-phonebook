@@ -30,10 +30,10 @@ const ContactForm = props => {
   const handleSubmit = e => {
     e.preventDefault();
 
-    const objId = nanoid();
+    const id = nanoid();
 
     addContacts({
-      id: objId,
+      id,
       name,
       number,
     });
