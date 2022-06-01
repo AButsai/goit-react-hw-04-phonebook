@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import { useState } from 'react';
+import { useLocalStoreg } from 'hooks/useLocalStorage';
 
 import ContactForm from './ContactForm';
 import ContactList from './ContactList';
@@ -6,34 +7,14 @@ import Filter from './Filter';
 
 import s from './App.module.css';
 
-export class App extends Component {
-  state = {
-    LOCALSTOREGE_KEY: 'contacts-key',
-    contacts: [],
-    filter: '',
-  };
+export function App() {
+  const LOCALSTOREGE_KEY = 'contacts-key';
 
-  componentDidMount() {
-    const { LOCALSTOREGE_KEY } = this.state;
-    const contacts = JSON.parse(localStorage.getItem(LOCALSTOREGE_KEY));
+  const [contact, setContact] = useLocalStoreg(LOCALSTOREGE_KEY, []);
+  const [filter, setFilter] = useState('');
 
-    if (contacts) {
-      this.setState({ contacts });
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const { contacts, LOCALSTOREGE_KEY } = this.state;
-    if (contacts !== prevState.contacts) {
-      localStorage.setItem(
-        LOCALSTOREGE_KEY,
-        JSON.stringify(this.state.contacts)
-      );
-    }
-  }
-
-  onSubmit = data => {
-    const contacts = [...this.state.contacts];
+  const onSubmit = data => {
+    const contacts = [...contact];
 
     for (const { name } of contacts) {
       if (name.toLowerCase() === data.name.toLowerCase()) {
@@ -42,47 +23,39 @@ export class App extends Component {
       }
     }
 
-    this.setState({ contacts: [...contacts, data] });
+    setContact([...contacts, data]);
   };
 
-  onFilterName = e => {
-    const { name, value } = e.currentTarget;
-    this.setState({ [name]: value });
+  const onFilterName = e => {
+    const { value } = e.currentTarget;
+    setFilter(value);
   };
 
-  onFilterContacts = () => {
-    const { contacts, filter } = this.state;
-
-    return [...contacts].filter(
+  const onFilterContacts = () => {
+    return [...contact].filter(
       ({ name }) => name.toLowerCase().indexOf(filter.toLowerCase()) !== -1
     );
   };
 
-  onDeleteContact = contactId => {
-    this.setState({
-      contacts: [...this.state.contacts].filter(({ id }) => id !== contactId),
-      filter: '',
-    });
+  const onDeleteContact = contactId => {
+    setContact([...contact].filter(({ id }) => id !== contactId));
+    setFilter('');
   };
 
-  render() {
-    const filterContacts = this.onFilterContacts();
+  return (
+    <div className={s.container}>
+      <h1 className={s.title}>Phonebook</h1>
 
-    return (
-      <div className={s.container}>
-        <h1 className={s.title}>Phonebook</h1>
+      <ContactForm addContacts={onSubmit} />
 
-        <ContactForm addContacts={this.onSubmit} />
+      <h2 className={s.contactsTitle}>Contacts</h2>
 
-        <h2 className={s.contactsTitle}>Contacts</h2>
+      <Filter value={filter} onFilterName={onFilterName} />
 
-        <Filter value={this.state.filter} onFilterName={this.onFilterName} />
-
-        <ContactList
-          filterContact={filterContacts}
-          deleteContact={this.onDeleteContact}
-        />
-      </div>
-    );
-  }
+      <ContactList
+        filterContact={onFilterContacts()}
+        deleteContact={onDeleteContact}
+      />
+    </div>
+  );
 }
