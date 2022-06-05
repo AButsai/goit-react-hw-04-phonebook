@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
 import s from './Filter.module.css';
 
-const Filter = props => {
-  const { value, onFilterName } = props;
+const Filter = ({ value, onFilterName }) => {
   return (
     <label className={s.label}>
       Find contacts by name

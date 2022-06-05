@@ -1,10 +1,7 @@
 import PropTypes from 'prop-types';
 import s from './ContactListItem.module.css';
 
-const ContactListItem = props => {
-  const { contacts, deleteContact } = props;
-  const { id, name, number } = contacts;
-
+const ContactListItem = ({ contacts: { id, name, number }, deleteContact }) => {
   return (
     <li className={s.item}>
       <span className={s.span}>
@@ -16,7 +13,8 @@ const ContactListItem = props => {
           deleteContact(id);
         }}
         onMouseDown={e => {
-          e.target.style.backgroundColor = '#0a95ff';
+          e.target.style.backgroundColor = '#0000ff';
+          e.target.style.color = '#ffffff';
         }}
         onMouseUp={e => {
           e.target.style.backgroundColor = 'transparent';
