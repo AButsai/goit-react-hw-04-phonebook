@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { nanoid } from 'nanoid';
 
 import s from './ContactForm.module.css';
 
@@ -28,10 +27,7 @@ const ContactForm = ({ addContacts }) => {
   const handleSubmit = e => {
     e.preventDefault();
 
-    const id = nanoid();
-
     addContacts({
-      id,
       name,
       number,
     });

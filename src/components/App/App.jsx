@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useLocalStoreg } from 'hooks/useLocalStorage';
+import { nanoid } from 'nanoid';
 import { LOCALSTOREGE_KEY } from 'helpers/variablesHelper';
 
-import ContactForm from './ContactForm';
-import ContactList from './ContactList';
-import Filter from './Filter';
+import ContactForm from '../ContactForm';
+import ContactList from '../ContactList';
+import Filter from '../Filter';
 
 import s from './App.module.css';
 
@@ -13,16 +14,17 @@ export function App() {
   const [filter, setFilter] = useState('');
 
   const onSubmit = data => {
-    const contacts = [...contact];
-
-    for (const { name } of contacts) {
+    for (const { name } of contact) {
       if (name.toLowerCase() === data.name.toLowerCase()) {
         alert(`${name} is already in contacts.`);
         return;
       }
     }
 
-    setContact([...contacts, data]);
+    const contactId = nanoid();
+    data.id = contactId;
+
+    setContact([...contact, data]);
   };
 
   const onFilterName = e => {
